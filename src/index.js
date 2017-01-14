@@ -4,6 +4,15 @@ const path = require('path');
 const FILE_HELPER = require('./file/index.js');
 const MERGER = require('./merger/index.js');
 
+const CONFIG = {
+    input: {
+        file: 'base.json'
+    },
+    output: {
+        directory: 'output'
+    }
+};
+
 function getDirectory() {
     const directory = process.argv[2];
 
@@ -49,7 +58,7 @@ function getFiles({directory}) {
 }
 
 function write({directory, outputs}) {
-    const outputDir = path.join(directory, '/output');
+    const outputDir = path.join(directory, CONFIG.output.directory);
 
     FILE_HELPER.create({
         folder: outputDir
@@ -73,12 +82,17 @@ function run() {
 
     const directory = getDirectory();
 
-    var templatePath = path.join(directory, '/base.json');
+    const outputPath = path.join(directory, CONFIG.output.directory);
+
+    const templatePath = path.join(directory, CONFIG.input.file);
     const template = JSON.parse(FILE_HELPER.read({
         file: templatePath
     }));
 
-    const res = FILE_HELPER.paths({dir: directory, exclusions: [templatePath]});
+    const res = FILE_HELPER.paths({
+        dir: directory,
+        exclusions: [templatePath, outputPath]
+    });
 
     const variants = getSubFolders({
         directory: directory
