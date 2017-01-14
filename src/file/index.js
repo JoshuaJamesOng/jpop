@@ -45,6 +45,37 @@ exports.folders = function({directory}) {
 };
 
 /**
+ * Returns an array of paths
+ */
+exports.paths = function ({dir, exclusions}) {
+    const files = FILE_SYSTEM.readdirSync(dir).filter(isNotHidden).filter(function (item) {
+        for (let i = 0; i < exclusions.length; i++) {
+            if (exclusions[i] === PATH.join(dir, item)) {
+                return false;
+            }
+        }
+        return true;
+    });
+    const directories = [];
+    for (let i = 0; i < files.length; i++) {
+        const path = PATH.join(dir, files[i]);
+        if (FILE_SYSTEM.statSync(path).isDirectory()) {
+            const result = exports.paths({
+                dir: path,
+                exclusions: exclusions
+            });
+
+            for (let j = 0; j < result.length; j++) {
+                directories.push(result[j]);
+            }
+        } else {
+            directories.push(path);
+        }
+    }
+    return directories;
+};
+
+/**
  * Returns an array of files in the passed directory
  */
 exports.files = function ({inside}) {

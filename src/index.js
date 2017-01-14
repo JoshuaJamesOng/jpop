@@ -73,9 +73,12 @@ function run() {
 
     const directory = getDirectory();
 
+    var templatePath = path.join(directory, '/base.json');
     const template = JSON.parse(FILE_HELPER.read({
-        file: path.join(directory, '/base.json')
+        file: templatePath
     }));
+
+    const res = FILE_HELPER.paths({dir: directory, exclusions: [templatePath]});
 
     const variants = getSubFolders({
         directory: directory
