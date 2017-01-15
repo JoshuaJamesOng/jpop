@@ -23,10 +23,6 @@ function getDirectory() {
     return directory;
 }
 
-function getSubFolders({directory}) {
-    return FILE_HELPER.folders({directory: directory});
-}
-
 function getVariants({directory, template, variants}) {
     return MERGER.mergeAll({
         into: template, from: variants
@@ -69,14 +65,10 @@ function run() {
         file: templatePath
     }));
 
-    const variants = FILE_HELPER.paths({
+    const variants = FILE_HELPER.folders({
         dir: directory,
         exclusions: [templatePath, outputPath]
     });
-
-    // const variants = getSubFolders({
-    //     directory: directory
-    // });
 
     const outputs = getVariants({
         directory: directory,
