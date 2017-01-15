@@ -88,6 +88,7 @@ if (!isRead) {
         run({
             config: CONFIG
         });
+        process.exit(0);
     });
 } else {
     run({
@@ -95,5 +96,6 @@ if (!isRead) {
     });
     process.exit(0);
 }
+
 
 

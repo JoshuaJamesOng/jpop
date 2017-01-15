@@ -33,19 +33,19 @@ async function getAnswers() {
         }
     ];
 
-    await INQUIRER.prompt(questions).then(function (answers) {
-        const directory = answers.directory;
-        const template = PATH.join(answers.directory, answers.template);
-        if (!FILE_HELPER.exists({file: directory})) {
-            UI.updateBottomBar('Directory "' + directory + '" does not exist');
-            process.exit(1);
-        } else if (!FILE_HELPER.exists({file: template})) {
-            UI.updateBottomBar('Template "' + template + '" does not exist');
-            process.exit(1);
-        }
+    const answers = await INQUIRER.prompt(questions);
 
-        return answers;
-    });
+    const directory = answers.directory;
+    const template = PATH.join(answers.directory, answers.template);
+    if (!FILE_HELPER.exists({file: directory})) {
+        UI.updateBottomBar('Directory "' + directory + '" does not exist');
+        process.exit(1);
+    } else if (!FILE_HELPER.exists({file: template})) {
+        UI.updateBottomBar('Template "' + template + '" does not exist');
+        process.exit(1);
+    }
+
+    return answers;
 }
 
 exports.getAnswers = getAnswers;
