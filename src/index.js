@@ -37,12 +37,20 @@ function write({directory, outputs}) {
     });
 
     for (let i = 0; i < outputs.length; i++) {
-        const targetDir = path.join(outputDir, outputs[i].directory);
-        FILE_HELPER.create({
-            folder: targetDir
-        });
+        const dirs = outputs[i].directory.split('/');
 
-        const targetPath = path.join(targetDir, outputs[i].filename);
+        let append = '';
+        for (let j = 0; j < dirs.length; j++) {
+            append += dirs[j] + '/';
+            const targetDir = path.join(outputDir, append);
+            FILE_HELPER.create({
+                folder: targetDir
+            });
+        }
+
+        require('assert').equal(append.substr(0, append.length - 1), outputs[i].directory);
+
+        const targetPath = path.join(path.join(outputDir, append), outputs[i].filename);
         FILE_HELPER.write({
             file: targetPath,
             json: outputs[i].contents
