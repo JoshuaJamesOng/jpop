@@ -79,8 +79,16 @@ const files = function ({inside}) {
     }).filter(isNotHidden);
 };
 
+/**
+ * Returns true if file exists
+ */
+const exists = function ({file}) {
+    return FILE_SYSTEM.existsSync(file);
+};
+
 exports.read = read;
 exports.write = write;
 exports.create = create;
 exports.folders = folders;
 exports.files = files;
+exports.exists = exists;

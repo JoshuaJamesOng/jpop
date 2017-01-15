@@ -3,9 +3,11 @@
 const path = require('path');
 const FILE_HELPER = require('./file/index.js');
 const MERGER = require('./merger/index.js');
+const PROMPT = require('./prompt/index.js');
 
 const CONFIG = {
     input: {
+        directory: '',
         file: 'base.json'
     },
     output: {
@@ -59,19 +61,17 @@ function write({directory, outputs}) {
     }
 }
 
-function run() {
+function run({config}) {
 
-    const directory = getDirectory();
+    const outputPath = path.join(config.input.directory, config.output.directory);
 
-    const outputPath = path.join(directory, CONFIG.output.directory);
-
-    const templatePath = path.join(directory, CONFIG.input.file);
+    const templatePath = path.join(config.input.directory, config.input.file);
     const template = FILE_HELPER.read({
         file: templatePath
     });
 
     const variants = FILE_HELPER.folders({
-        dir: directory,
+        dir: config.input.directory,
         exclusions: [templatePath, outputPath]
     });
 
@@ -81,10 +81,17 @@ function run() {
     });
 
     write({
-        directory: directory,
+        directory: config.input.directory,
         outputs: outputs,
     });
 
 }
 
-run();
+PROMPT.getAnswers().then(function (answers) {
+    CONFIG.input.directory = answers.directory;
+    CONFIG.input.file = answers.template;
+    CONFIG.output.directory = answers.output;
+    run({
+        config: CONFIG
+    });
+});
