@@ -2,20 +2,24 @@
 
 const FILE_HELPER = require('../file/index.js');
 const INQUIRER = require('inquirer');
+const PATH = require('path');
+const UI = new INQUIRER.ui.BottomBar();
 
 /**
  * Returns a Promise with an array of Answers
  */
 async function getAnswers() {
 
-    console.log('Welcome to jpop!');
+    UI.updateBottomBar('============================\n');
+    UI.updateBottomBar('Welcome to jpop!\n');
+    UI.updateBottomBar('============================\n');
 
     const questions = [
         {
             type: 'input',
             name: 'directory',
             message: 'Where are the snippets and template located:',
-            default: '',
+            default: __dirname,
         }, {
             type: 'input',
             name: 'template',
@@ -29,7 +33,19 @@ async function getAnswers() {
         }
     ];
 
-    return await INQUIRER.prompt(questions);
+    await INQUIRER.prompt(questions).then(function (answers) {
+        const directory = answers.directory;
+        const template = PATH.join(answers.directory, answers.template);
+        if (!FILE_HELPER.exists({file: directory})) {
+            UI.updateBottomBar('Directory "' + directory + '" does not exist');
+            process.exit(1);
+        } else if (!FILE_HELPER.exists({file: template})) {
+            UI.updateBottomBar('Template "' + template + '" does not exist');
+            process.exit(1);
+        }
+
+        return answers;
+    });
 }
 
 exports.getAnswers = getAnswers;

@@ -1,30 +1,21 @@
 'use strict';
 
 const path = require('path');
+const ARGUMENTS = require('./arguments/index.js');
 const FILE_HELPER = require('./file/index.js');
 const MERGER = require('./merger/index.js');
 const PROMPT = require('./prompt/index.js');
 
 const CONFIG = {
     input: {
-        directory: '',
-        file: 'base.json'
+        directory: undefined,
+        file: undefined
     },
     output: {
-        directory: 'output',
+        directory: undefined,
         version: '1.0.0'
     }
 };
-
-function getDirectory() {
-    const directory = process.argv[2];
-
-    if (directory === undefined) {
-        throw new Error('Command line argument not passed');
-    }
-
-    return directory;
-}
 
 function getVariants({template, variants}) {
     return MERGER.mergeAll({
@@ -87,11 +78,22 @@ function run({config}) {
 
 }
 
-PROMPT.getAnswers().then(function (answers) {
-    CONFIG.input.directory = answers.directory;
-    CONFIG.input.file = answers.template;
-    CONFIG.output.directory = answers.output;
+const isRead = ARGUMENTS.getArguments({config: CONFIG});
+
+if (!isRead) {
+    PROMPT.getAnswers().then(function (answers) {
+        CONFIG.input.directory = answers.directory;
+        CONFIG.input.file = answers.template;
+        CONFIG.output.directory = answers.output;
+        run({
+            config: CONFIG
+        });
+    });
+} else {
     run({
         config: CONFIG
     });
-});
+    process.exit(0);
+}
+
+
