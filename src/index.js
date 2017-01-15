@@ -23,14 +23,10 @@ function getDirectory() {
     return directory;
 }
 
-function getVariants({directory, template, variants}) {
+function getVariants({template, variants}) {
     return MERGER.mergeAll({
         into: template, from: variants
     });
-}
-
-function getFiles({directory}) {
-    return FILE_HELPER.files({inside: directory})
 }
 
 function write({directory, outputs}) {
@@ -71,7 +67,6 @@ function run() {
     });
 
     const outputs = getVariants({
-        directory: directory,
         template: template,
         variants: variants
     });
