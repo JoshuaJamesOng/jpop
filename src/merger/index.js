@@ -2,11 +2,12 @@
 
 const FILE_HELPER = require('../file/index.js');
 const OVERRIDE = require('json-override');
+const PATH = require('path');
 
 /**
  * Merges the JSON contents of each file in the given paths into a template
  */
-const mergeAll = function ({into, from}) {
+const mergeAll = function ({into, from, version}) {
     const outputs = [];
 
     for (let i = 0; i < from.length; i++) {
@@ -20,7 +21,11 @@ const mergeAll = function ({into, from}) {
 
         const splits = path.split('/');
         const filename = splits[splits.length - 1];
-        const directory = path.substr(0, path.length - filename.length - 1);
+        let directory = path.substr(0, path.length - filename.length - 1);
+
+        if (version !== undefined) {
+            directory = PATH.join(directory, version);
+        }
 
         outputs.push(
             new Populated(directory, filename, merged)

@@ -9,7 +9,8 @@ const CONFIG = {
         file: 'base.json'
     },
     output: {
-        directory: 'output'
+        directory: 'output',
+        version: '1.0.0'
     }
 };
 
@@ -25,7 +26,7 @@ function getDirectory() {
 
 function getVariants({template, variants}) {
     return MERGER.mergeAll({
-        into: template, from: variants
+        into: template, from: variants, version: CONFIG.output.version
     });
 }
 
@@ -81,7 +82,7 @@ function run() {
 
     write({
         directory: directory,
-        outputs: outputs
+        outputs: outputs,
     });
 
 }
