@@ -28,29 +28,9 @@ function getSubFolders({directory}) {
 }
 
 function getVariants({directory, template, variants}) {
-    const outputs = [];
-    for (let i = 0; i < variants.length; i++) {
-        const subFolder = path.join(directory, variants[i]);
-        const files = getFiles({
-            directory: subFolder
-        });
-
-        for (let j = 0; j < files.length; j++) {
-            const file = path.join(subFolder, files[j]);
-            const snippet = JSON.parse(FILE_HELPER.read({
-                file: file
-            }));
-
-            const build = MERGER.merge({
-                into: template,
-                from: snippet
-            });
-
-            const populated = new MERGER.Populated(variants[i], files[j], build);
-            outputs.push(populated);
-        }
-    }
-    return outputs;
+    return MERGER.mergeAll({
+        into: template, from: variants
+    });
 }
 
 function getFiles({directory}) {
@@ -89,14 +69,14 @@ function run() {
         file: templatePath
     }));
 
-    const res = FILE_HELPER.paths({
+    const variants = FILE_HELPER.paths({
         dir: directory,
         exclusions: [templatePath, outputPath]
     });
 
-    const variants = getSubFolders({
-        directory: directory
-    });
+    // const variants = getSubFolders({
+    //     directory: directory
+    // });
 
     const outputs = getVariants({
         directory: directory,
