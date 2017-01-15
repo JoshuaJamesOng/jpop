@@ -13,9 +13,9 @@ const mergeAll = function ({into, from}) {
         const path = from[i];
         const merged = merge({
             into: into,
-            from: JSON.parse(FILE_HELPER.read({
+            from: FILE_HELPER.read({
                 file: path
-            }))
+            })
         });
 
         const splits = path.split('/');

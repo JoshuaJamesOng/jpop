@@ -65,9 +65,9 @@ function run() {
     const outputPath = path.join(directory, CONFIG.output.directory);
 
     const templatePath = path.join(directory, CONFIG.input.file);
-    const template = JSON.parse(FILE_HELPER.read({
+    const template = FILE_HELPER.read({
         file: templatePath
-    }));
+    });
 
     const variants = FILE_HELPER.folders({
         dir: directory,

@@ -16,7 +16,8 @@ const isNotHidden = function (input) {
  * Reads file synchronously
  */
 const read = function ({file}) {
-    return FILE_SYSTEM.readFileSync(file, ENCODING)
+    const read = FILE_SYSTEM.readFileSync(file, ENCODING)
+    return JSON.parse(read);
 };
 
 /**
