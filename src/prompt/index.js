@@ -31,6 +31,20 @@ async function getAnswers() {
             name: 'output',
             message: 'Where shall I put the populated files:',
             default: 'output'
+        }, {
+            type: 'list',
+            name: 'isVersion',
+            message: 'Append a version to output path:',
+            choices: ['none', 'prefix', 'suffix'],
+            default: 0
+        }, {
+            type: 'input',
+            name: 'version',
+            message: 'Version:',
+            default: '1.0',
+            when: function (answers) {
+                return answers.isVersion !== 'none';
+            }
         }
     ];
 

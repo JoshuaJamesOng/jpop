@@ -13,7 +13,8 @@ const CONFIG = {
     },
     output: {
         directory: undefined,
-        version: '1.0.0'
+        versionPosition: undefined,
+        version: undefined
     }
 };
 
@@ -85,6 +86,8 @@ if (!isRead) {
         CONFIG.input.directory = answers.directory;
         CONFIG.input.file = answers.template;
         CONFIG.output.directory = answers.output;
+        CONFIG.output.versionPosition = answers.isVersion;
+        CONFIG.output.version = answers.version;
         run({
             config: CONFIG
         });
