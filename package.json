@@ -1,0 +1,27 @@
+{
+  "name": "jpop",
+  "version": "1.0.0",
+  "description": "Populate base json template with json snippets",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node --harmony-async-await src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoshuaJamesOng/jpop.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/JoshuaJamesOng/jpop/issues"
+  },
+  "homepage": "https://github.com/JoshuaJamesOng/jpop#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "inquirer": "^2.0.0",
+    "json-override": "^0.2.0",
+    "winston": "^2.3.0"
+  },
+  "dependencies": {}
+}
