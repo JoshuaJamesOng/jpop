@@ -11,17 +11,17 @@
     "type": "git",
     "url": "git+https://github.com/JoshuaJamesOng/jpop.git"
   },
-  "author": "",
+  "author": "JoshuaJamesOng",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/JoshuaJamesOng/jpop/issues"
   },
   "homepage": "https://github.com/JoshuaJamesOng/jpop#readme",
   "devDependencies": {
-    "gulp": "^3.9.1",
+  },
+  "dependencies": {
     "inquirer": "^2.0.0",
     "json-override": "^0.2.0",
     "winston": "^2.3.0"
-  },
-  "dependencies": {}
+  }
 }
