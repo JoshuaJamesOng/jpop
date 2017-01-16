@@ -2,6 +2,7 @@
 
 const FILE_HELPER = require('../file/index.js');
 const INQUIRER = require('inquirer');
+const LOGGER = require('winston');
 const PATH = require('path');
 const UI = new INQUIRER.ui.BottomBar();
 
@@ -38,10 +39,14 @@ async function getAnswers() {
     const directory = answers.directory;
     const template = PATH.join(answers.directory, answers.template);
     if (!FILE_HELPER.exists({file: directory})) {
-        UI.updateBottomBar('Directory "' + directory + '" does not exist');
+        LOGGER.log('error', 'Directory does not exist', {
+            path: directory
+        });
         process.exit(1);
     } else if (!FILE_HELPER.exists({file: template})) {
-        UI.updateBottomBar('Template "' + template + '" does not exist');
+        LOGGER.log('error', 'Template does not exist', {
+            path: template
+        });
         process.exit(1);
     }
 
