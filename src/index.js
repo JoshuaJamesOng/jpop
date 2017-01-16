@@ -20,7 +20,10 @@ const CONFIG = {
 
 function getVariants({template, variants}) {
     return MERGER.mergeAll({
-        into: template, from: variants, version: CONFIG.output.version
+        into: template, from: variants, version: {
+            position: CONFIG.output.versionPosition,
+            value: CONFIG.output.version
+        }
     });
 }
 

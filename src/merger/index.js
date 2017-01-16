@@ -23,8 +23,12 @@ const mergeAll = function ({into, from, version}) {
         const filename = splits[splits.length - 1];
         let directory = path.substr(0, path.length - filename.length - 1);
 
-        if (version !== undefined) {
-            directory = PATH.join(directory, version);
+        if (version !== undefined && version.position !== undefined && version.value !== undefined) {
+            if (version.position === 'prefix') {
+                directory = PATH.join(version.value, directory);
+            } else if (version.position === 'suffix') {
+                directory = PATH.join(directory, version.value);
+            }
         }
 
         outputs.push(
