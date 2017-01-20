@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node --harmony-async-await src/index.js",
-    "test": "node --harmony-async-await examples/example.js"
+    "test": "node --harmony-async-await example.js"
   },
   "repository": {
     "type": "git",

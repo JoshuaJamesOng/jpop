@@ -82,11 +82,11 @@ function run({config}) {
 
 }
 
-function pop() {
+function pop({pwd}) {
     const isRead = ARGUMENTS.getArguments({config: CONFIG});
 
     if (!isRead) {
-        PROMPT.getAnswers().then(function (answers) {
+        PROMPT.getAnswers({pwd: pwd}).then(function (answers) {
             CONFIG.input.directory = answers.directory;
             CONFIG.input.file = answers.template;
             CONFIG.output.directory = answers.output;

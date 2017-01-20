@@ -9,7 +9,7 @@ const UI = new INQUIRER.ui.BottomBar();
 /**
  * Returns a Promise with an array of Answers
  */
-async function getAnswers() {
+async function getAnswers({pwd}) {
 
     UI.updateBottomBar('============================\n');
     UI.updateBottomBar('Welcome to jpop!\n');
@@ -20,7 +20,7 @@ async function getAnswers() {
             type: 'input',
             name: 'directory',
             message: 'Where are the snippets and template located:',
-            default: __dirname,
+            default: pwd,
         }, {
             type: 'input',
             name: 'template',
