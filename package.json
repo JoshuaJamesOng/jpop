@@ -1,11 +1,11 @@
 {
   "name": "jpop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Populate base json template with json snippets",
   "main": "src/index.js",
   "scripts": {
     "start": "node --harmony-async-await src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --harmony-async-await examples/example.js"
   },
   "repository": {
     "type": "git",

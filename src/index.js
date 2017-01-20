@@ -82,26 +82,27 @@ function run({config}) {
 
 }
 
-const isRead = ARGUMENTS.getArguments({config: CONFIG});
+function pop() {
+    const isRead = ARGUMENTS.getArguments({config: CONFIG});
 
-if (!isRead) {
-    PROMPT.getAnswers().then(function (answers) {
-        CONFIG.input.directory = answers.directory;
-        CONFIG.input.file = answers.template;
-        CONFIG.output.directory = answers.output;
-        CONFIG.output.versionPosition = answers.isVersion;
-        CONFIG.output.version = answers.version;
+    if (!isRead) {
+        PROMPT.getAnswers().then(function (answers) {
+            CONFIG.input.directory = answers.directory;
+            CONFIG.input.file = answers.template;
+            CONFIG.output.directory = answers.output;
+            CONFIG.output.versionPosition = answers.isVersion;
+            CONFIG.output.version = answers.version;
+            run({
+                config: CONFIG
+            });
+            process.exit(0);
+        });
+    } else {
         run({
             config: CONFIG
         });
         process.exit(0);
-    });
-} else {
-    run({
-        config: CONFIG
-    });
-    process.exit(0);
+    }
 }
 
-
-
+exports.pop = pop;
