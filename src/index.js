@@ -29,6 +29,7 @@ function getVariants({template, variants}) {
 }
 
 function write({directory, outputs}) {
+    const files = [];
     const outputDir = path.join(directory, CONFIG.output.directory);
 
     FILE_HELPER.create({
@@ -54,7 +55,11 @@ function write({directory, outputs}) {
             file: targetPath,
             json: outputs[i].contents
         });
+
+        files.push(targetPath);
     }
+
+    return files;
 }
 
 function run({config}) {
@@ -76,11 +81,12 @@ function run({config}) {
         variants: variants
     });
 
-    write({
+    const files = write({
         directory: config.input.directory,
         outputs: outputs,
     });
 
+    return files;
 }
 
 async function pop({pwd}) {
@@ -94,11 +100,11 @@ async function pop({pwd}) {
         CONFIG.output.directory = answers.output;
         CONFIG.output.versionPosition = answers.isVersion;
         CONFIG.output.version = answers.version;
-        run({
+        return run({
             config: CONFIG
         });
     } else {
-        run({
+        return run({
             config: CONFIG
         });
     }
