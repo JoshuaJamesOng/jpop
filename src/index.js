@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 'use strict';
 
 const path = require('path');
@@ -82,26 +83,24 @@ function run({config}) {
 
 }
 
-function pop({pwd}) {
+async function pop({pwd}) {
     const isRead = ARGUMENTS.getArguments({config: CONFIG});
 
     if (!isRead) {
-        PROMPT.getAnswers({pwd: pwd}).then(function (answers) {
-            CONFIG.input.directory = answers.directory;
-            CONFIG.input.file = answers.template;
-            CONFIG.output.directory = answers.output;
-            CONFIG.output.versionPosition = answers.isVersion;
-            CONFIG.output.version = answers.version;
-            run({
-                config: CONFIG
-            });
-            process.exit(0);
+        const answers = await PROMPT.getAnswers({pwd: pwd});
+
+        CONFIG.input.directory = answers.directory;
+        CONFIG.input.file = answers.template;
+        CONFIG.output.directory = answers.output;
+        CONFIG.output.versionPosition = answers.isVersion;
+        CONFIG.output.version = answers.version;
+        run({
+            config: CONFIG
         });
     } else {
         run({
             config: CONFIG
         });
-        process.exit(0);
     }
 }
 
