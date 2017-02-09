@@ -37,6 +37,43 @@ const create = function ({folder}) {
 };
 
 /**
+ * Returns a filtered array of paths to files within directory recursively that match the supplied needle
+ */
+const findAll = function ({dir, filter, needle}) {
+    const files = FILE_SYSTEM.readdirSync(dir)
+        .filter(isNotHidden)
+        .filter(function (item) {
+            const exclusions = filter.data;
+            for (let i = 0; i < exclusions.length; i++) {
+                if (exclusions[i] === PATH.join(dir, item) || exclusions[i] === item) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+
+    const directories = [];
+    for (let i = 0; i < files.length; i++) {
+        const path = PATH.join(dir, files[i]);
+        if (FILE_SYSTEM.statSync(path).isDirectory()) {
+            const result = findAll({
+                dir: path,
+                filter: filter,
+                needle: needle
+            });
+
+            for (let j = 0; j < result.length; j++) {
+                directories.push(result[j]);
+            }
+        } else if (files[i] === needle) {
+            directories.push(path);
+        }
+    }
+    return directories;
+};
+
+/**
  * Returns a filtered array of paths to files within directory recursively
  */
 const folders = function ({dir, filter}) {
@@ -103,6 +140,7 @@ const exists = function ({file}) {
 exports.read = read;
 exports.write = write;
 exports.create = create;
+exports.findAll = findAll;
 exports.folders = folders;
 exports.files = files;
 exports.exists = exists;

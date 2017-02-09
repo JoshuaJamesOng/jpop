@@ -66,10 +66,22 @@ function run({config}) {
 
     const outputPath = path.join(config.input.directory, config.output.directory);
 
-    const templatePath = path.join(config.input.directory, config.input.file);
-    const template = FILE_HELPER.read({
-        file: templatePath
+    const templatePaths = FILE_HELPER.findAll({
+        dir: config.input.directory,
+        filter: {
+            data: [outputPath]
+        },
+        needle: config.input.file
     });
+
+    const templates = [];
+    for (let i = 0; i < templatePaths.length; i++) {
+        templates.push(FILE_HELPER.read({
+            file: templatePaths[i]
+        }));
+    }
+
+    const template = templates[0];
 
     const variants = FILE_HELPER.folders({
         dir: config.input.directory,
