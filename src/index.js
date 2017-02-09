@@ -73,7 +73,10 @@ function run({config}) {
 
     const variants = FILE_HELPER.folders({
         dir: config.input.directory,
-        exclusions: [config.input.file, outputPath]
+        filter: {
+            type: 'OUT',
+            data: [config.input.file, outputPath]
+        }
     });
 
     const outputs = getVariants({

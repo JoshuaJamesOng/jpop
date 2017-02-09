@@ -39,16 +39,30 @@ const create = function ({folder}) {
 /**
  * Returns a filtered array of paths to files within directory recursively
  */
-const folders = function ({dir, exclusions}) {
+const folders = function ({dir, filter}) {
     const files = FILE_SYSTEM.readdirSync(dir)
         .filter(isNotHidden)
         .filter(function (item) {
-            for (let i = 0; i < exclusions.length; i++) {
-                if (exclusions[i] === PATH.join(dir, item) || exclusions[i] === item) {
-                    return false;
+
+            const isExclude = filter.type === 'OUT';
+            const isInclude = filter.type === 'IN';
+            if (isExclude) {
+                const exclusions = filter.data;
+                for (let i = 0; i < exclusions.length; i++) {
+                    if (exclusions[i] === PATH.join(dir, item) || exclusions[i] === item) {
+                        return false;
+                    }
+                }
+            } else if (isInclude) {
+                const inclusions = filter.data;
+                for (let i = 0; i < inclusions.length; i++) {
+                    if (inclusions[i] === PATH.join(dir, item) || inclusions[i] === item) {
+                        return true;
+                    }
                 }
             }
-            return true;
+
+            return isExclude;
         });
 
     const directories = [];
@@ -57,7 +71,7 @@ const folders = function ({dir, exclusions}) {
         if (FILE_SYSTEM.statSync(path).isDirectory()) {
             const result = folders({
                 dir: path,
-                exclusions: exclusions
+                filter: filter
             });
 
             for (let j = 0; j < result.length; j++) {
