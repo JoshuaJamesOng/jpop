@@ -11,9 +11,33 @@ const mergeAll = function ({into, from, version}) {
     const outputs = [];
 
     for (let i = 0; i < from.length; i++) {
+
         const path = from[i];
+
+        // TODO Which bases do I need to merge
+        const bases = [];
+        for (let j = 0; j < into.length; j++) {
+            const templatePath = into[j];
+            const templateDirectory = templatePath.substring(0, templatePath.lastIndexOf("/") + 1);
+            if (-1 < path.indexOf(templateDirectory)) {
+                bases.push(FILE_HELPER.read({
+                    file: templatePath
+                }));
+            }
+        }
+
+        let mergedBase = bases[0];
+        bases.splice(0, 1);
+
+        for (let j = 0; j < bases.length; j++) {
+            mergedBase = merge({
+                into: mergedBase,
+                from: bases[j]
+            });
+        }
+
         const merged = merge({
-            into: into,
+            into: mergedBase,
             from: FILE_HELPER.read({
                 file: path
             })

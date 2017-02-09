@@ -19,9 +19,11 @@ const CONFIG = {
     }
 };
 
-function getVariants({template, variants}) {
+function getVariants({templates, variants}) {
     return MERGER.mergeAll({
-        into: template, from: variants, version: {
+        into: templates,
+        from: variants,
+        version: {
             position: CONFIG.output.versionPosition,
             value: CONFIG.output.version
         }
@@ -66,22 +68,13 @@ function run({config}) {
 
     const outputPath = path.join(config.input.directory, config.output.directory);
 
-    const templatePaths = FILE_HELPER.findAll({
+    const templates = FILE_HELPER.findAll({
         dir: config.input.directory,
         filter: {
             data: [outputPath]
         },
         needle: config.input.file
     });
-
-    const templates = [];
-    for (let i = 0; i < templatePaths.length; i++) {
-        templates.push(FILE_HELPER.read({
-            file: templatePaths[i]
-        }));
-    }
-
-    const template = templates[0];
 
     const variants = FILE_HELPER.folders({
         dir: config.input.directory,
@@ -92,7 +85,7 @@ function run({config}) {
     });
 
     const outputs = getVariants({
-        template: template,
+        templates: templates,
         variants: variants
     });
 
