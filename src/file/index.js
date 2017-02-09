@@ -44,7 +44,7 @@ const folders = function ({dir, exclusions}) {
         .filter(isNotHidden)
         .filter(function (item) {
             for (let i = 0; i < exclusions.length; i++) {
-                if (exclusions[i] === PATH.join(dir, item)) {
+                if (exclusions[i] === PATH.join(dir, item) || exclusions[i] === item) {
                     return false;
                 }
             }
