@@ -1,0 +1,6 @@
+{
+  "nested": true,
+  "o": {
+    "hello": "I've changed nested"
+  }
+}
