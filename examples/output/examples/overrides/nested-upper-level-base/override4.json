@@ -1,0 +1,11 @@
+{
+  "o": {
+    "hello": "I've changed nested"
+  },
+  "a": [
+    1,
+    2,
+    3
+  ],
+  "nested": true
+}
