@@ -76,6 +76,19 @@ function run({config}) {
         needle: config.input.file
     });
 
+    // Sort template paths by length as a quick fix
+    templates.sort(function (lhs, rhs) {
+        if (lhs.length < rhs.length) {
+            return -1;
+        }
+        if (lhs.length > rhs.length) {
+            return 1;
+        }
+
+        return 0;
+
+    });
+
     const variants = FILE_HELPER.folders({
         dir: config.input.directory,
         filter: {
