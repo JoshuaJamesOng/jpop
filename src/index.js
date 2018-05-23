@@ -39,11 +39,11 @@ function write({directory, outputs}) {
     });
 
     for (let i = 0; i < outputs.length; i++) {
-        const dirs = outputs[i].directory.split('/');
+        const dirs = outputs[i].directory.split(path.sep);
 
         let append = '';
         for (let j = 0; j < dirs.length; j++) {
-            append += dirs[j] + '/';
+            append += dirs[j] + path.sep;
             const targetDir = path.join(outputDir, append);
             FILE_HELPER.create({
                 folder: targetDir

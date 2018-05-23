@@ -18,7 +18,7 @@ const mergeAll = function ({into, from, version}) {
         const bases = [];
         for (let j = 0; j < into.length; j++) {
             const templatePath = into[j];
-            const templateDirectory = templatePath.substring(0, templatePath.lastIndexOf("/") + 1);
+            const templateDirectory = templatePath.substring(0, templatePath.lastIndexOf(PATH.sep) + 1);
             if (-1 < path.indexOf(templateDirectory)) {
                 bases.push(FILE_HELPER.read({
                     file: templatePath
@@ -43,7 +43,7 @@ const mergeAll = function ({into, from, version}) {
             })
         });
 
-        const splits = path.split('/');
+        const splits = path.split(PATH.sep);
         const filename = splits[splits.length - 1];
         let directory = path.substr(0, path.length - filename.length - 1);
 
