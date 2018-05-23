@@ -4,8 +4,8 @@
   "description": "Populate base json template with json snippets",
   "main": "src/index.js",
   "scripts": {
-    "start": "node --harmony-async-await src/index.js",
-    "test": "node --harmony-async-await example.js"
+    "start": "node src/index.js",
+    "test": "node example.js"
   },
   "repository": {
     "type": "git",
@@ -17,11 +17,11 @@
     "url": "https://github.com/JoshuaJamesOng/jpop/issues"
   },
   "homepage": "https://github.com/JoshuaJamesOng/jpop#readme",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
     "inquirer": "^2.0.0",
     "json-override": "^0.2.0",
+    "npm": "^6.0.1",
     "winston": "^2.3.0"
   }
 }
