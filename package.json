@@ -1,7 +1,8 @@
 {
   "name": "jpop",
-  "version": "1.0.6",
+  "version": "2.0.0",
   "description": "Populate base json template with json snippets",
+  "type": "module",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
@@ -17,11 +18,10 @@
     "url": "https://github.com/JoshuaJamesOng/jpop/issues"
   },
   "homepage": "https://github.com/JoshuaJamesOng/jpop#readme",
-  "devDependencies": {},
   "dependencies": {
-    "inquirer": "^5.2.0",
+    "inquirer": "^9.0.2",
     "json-override": "^0.2.0",
-    "npm": "^6.0.1",
-    "winston": "^2.3.0"
+    "npm": "^8.15.0",
+    "winston": "^3.8.1"
   }
 }

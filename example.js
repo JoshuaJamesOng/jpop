@@ -1,17 +1,16 @@
-'use strict';
+import { jpop } from './src/index.js'
+import { exec } from 'child_process';
+import { dirname } from 'path';
 
-const JPOP = require('./src/index.js');
-const EXEC = require('child_process').exec;
+const files = await jpop({pwd: dirname('')})
 
-JPOP.pop({pwd: __dirname}).then(function (files) {
-    console.log(`Created: ${files}`);
+console.log(`Created: ${files}`);
 
-    for (let i = 0; i < files.length; i++) {
-        EXEC(`cat ${files[i]}`, (error, stdout) => {
-            if (error) {
-                return;
-            }
-            console.log(`Contents: ${stdout}`);
-        });
-    }
-});
+for (let i = 0; i < files.length; i++) {
+    exec(`cat ${files[i]}`, (error, stdout) => {
+        if (error) {
+            return;
+        }
+        console.log(`Contents: ${stdout}`);
+    });
+}
