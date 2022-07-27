@@ -2,6 +2,7 @@
   "name": "jpop",
   "version": "1.0.6",
   "description": "Populate base json template with json snippets",
+  "type": "module",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",

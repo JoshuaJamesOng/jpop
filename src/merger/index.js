@@ -1,8 +1,6 @@
-'use strict';
-
-const FILE_HELPER = require('../file/index.js');
-const OVERRIDE = require('json-override');
-const PATH = require('path');
+import { read } from '../file/index.js';
+import override from 'json-override';
+import { sep, join } from 'path';
 
 /**
  * Merges the JSON contents of each file in the given paths into a template
@@ -18,9 +16,9 @@ const mergeAll = function ({into, from, version}) {
         const bases = [];
         for (let j = 0; j < into.length; j++) {
             const templatePath = into[j];
-            const templateDirectory = templatePath.substring(0, templatePath.lastIndexOf(PATH.sep) + 1);
+            const templateDirectory = templatePath.substring(0, templatePath.lastIndexOf(sep) + 1);
             if (-1 < path.indexOf(templateDirectory)) {
-                bases.push(FILE_HELPER.read({
+                bases.push(read({
                     file: templatePath
                 }));
             }
@@ -38,20 +36,20 @@ const mergeAll = function ({into, from, version}) {
 
         const merged = merge({
             into: mergedBase,
-            from: FILE_HELPER.read({
+            from: read({
                 file: path
             })
         });
 
-        const splits = path.split(PATH.sep);
+        const splits = path.split(sep);
         const filename = splits[splits.length - 1];
         let directory = path.substr(0, path.length - filename.length - 1);
 
         if (version !== undefined && version.position !== undefined && version.value !== undefined) {
             if (version.position === 'prefix') {
-                directory = PATH.join(version.value, directory);
+                directory = join(version.value, directory);
             } else if (version.position === 'suffix') {
-                directory = PATH.join(directory, version.value);
+                directory = join(directory, version.value);
             }
         }
 
@@ -67,7 +65,7 @@ const mergeAll = function ({into, from, version}) {
  * Merges the properties of one object with another to create a new object
  */
 const merge = function ({into, from}) {
-    return OVERRIDE(into, from, true);
+    return override(into, from, true);
 };
 
 class Populated {
@@ -80,5 +78,4 @@ class Populated {
 
 }
 
-exports.mergeAll = mergeAll;
-exports.Populated = Populated;
+export { mergeAll, Populated }

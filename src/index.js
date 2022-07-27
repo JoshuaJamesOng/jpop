@@ -1,11 +1,10 @@
-#!/usr/bin/env node
-'use strict';
-
-const path = require('path');
-const ARGUMENTS = require('./arguments/index.js');
-const FILE_HELPER = require('./file/index.js');
-const MERGER = require('./merger/index.js');
-const PROMPT = require('./prompt/index.js');
+import { join, sep } from 'path';
+import { getArguments } from './arguments/index.js';
+import { create, write, findAll, folders } from './file/index.js';
+import { mergeAll } from './merger/index.js';
+import { getAnswers } from './prompt/index.js';
+import winston from 'winston';
+import { equal } from 'assert';
 
 const CONFIG = {
     input: {
@@ -20,7 +19,7 @@ const CONFIG = {
 };
 
 function getVariants({templates, variants}) {
-    return MERGER.mergeAll({
+    return mergeAll({
         into: templates,
         from: variants,
         version: {
@@ -30,30 +29,30 @@ function getVariants({templates, variants}) {
     });
 }
 
-function write({directory, outputs}) {
+function writeFiles({directory, outputs}) {
     const files = [];
-    const outputDir = path.join(directory, CONFIG.output.directory);
+    const outputDir = join(directory, CONFIG.output.directory);
 
-    FILE_HELPER.create({
+    create({
         folder: outputDir
     });
 
     for (let i = 0; i < outputs.length; i++) {
-        const dirs = outputs[i].directory.split(path.sep);
+        const dirs = outputs[i].directory.split(sep);
 
         let append = '';
         for (let j = 0; j < dirs.length; j++) {
-            append += dirs[j] + path.sep;
-            const targetDir = path.join(outputDir, append);
-            FILE_HELPER.create({
+            append += dirs[j] + sep;
+            const targetDir = join(outputDir, append);
+            create({
                 folder: targetDir
             });
         }
 
-        require('assert').equal(append.substr(0, append.length - 1), outputs[i].directory);
+        equal(append.substr(0, append.length - 1), outputs[i].directory);
 
-        const targetPath = path.join(path.join(outputDir, append), outputs[i].filename);
-        FILE_HELPER.write({
+        const targetPath = join(join(outputDir, append), outputs[i].filename);
+        write({
             file: targetPath,
             json: outputs[i].contents
         });
@@ -66,9 +65,9 @@ function write({directory, outputs}) {
 
 function run({config}) {
 
-    const outputPath = path.join(config.input.directory, config.output.directory);
+    const outputPath = join(config.input.directory, config.output.directory);
 
-    const templates = FILE_HELPER.findAll({
+    const templates = findAll({
         dir: config.input.directory,
         filter: {
             data: [outputPath]
@@ -89,7 +88,7 @@ function run({config}) {
 
     });
 
-    const variants = FILE_HELPER.folders({
+    const variants = folders({
         dir: config.input.directory,
         filter: {
             type: 'OUT',
@@ -102,7 +101,7 @@ function run({config}) {
         variants: variants
     });
 
-    const files = write({
+    const files = writeFiles({
         directory: config.input.directory,
         outputs: outputs,
     });
@@ -110,11 +109,16 @@ function run({config}) {
     return files;
 }
 
-async function pop({pwd}) {
-    const isRead = ARGUMENTS.getArguments({config: CONFIG});
+async function jpop({pwd}) {
+    winston.add(
+        new winston.transports.Console({
+            format: winston.format.simple(),
+        })
+    )
 
+    const isRead = getArguments({config: CONFIG});
     if (!isRead) {
-        const answers = await PROMPT.getAnswers({pwd: pwd});
+        const answers = await getAnswers({pwd: pwd});
 
         CONFIG.input.directory = answers.directory;
         CONFIG.input.file = answers.template;
@@ -131,4 +135,4 @@ async function pop({pwd}) {
     }
 }
 
-exports.pop = pop;
+export { jpop };

@@ -1,7 +1,5 @@
-'use strict';
-
-const FILE_SYSTEM = require('fs');
-const PATH = require('path');
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
+import { join } from 'path';
 
 const ENCODING = 'utf8';
 
@@ -16,7 +14,7 @@ const isNotHidden = function (input) {
  * Reads file synchronously
  */
 const read = function ({file}) {
-    const read = FILE_SYSTEM.readFileSync(file, ENCODING)
+    const read = readFileSync(file, ENCODING)
     return JSON.parse(read);
 };
 
@@ -24,15 +22,15 @@ const read = function ({file}) {
  * Writes JSON to pretty-formatted file synchronously
  */
 const write = function ({file, json}) {
-    FILE_SYSTEM.writeFileSync(file, JSON.stringify(json, null, 2));
+    writeFileSync(file, JSON.stringify(json, null, 2));
 };
 
 /**
  * Creates directory if it doesn't exist
  */
 const create = function ({folder}) {
-    if (!FILE_SYSTEM.existsSync(folder)) {
-        FILE_SYSTEM.mkdirSync(folder);
+    if (!existsSync(folder)) {
+        mkdirSync(folder);
     }
 };
 
@@ -40,12 +38,12 @@ const create = function ({folder}) {
  * Returns a filtered array of paths to files within directory recursively that match the supplied needle
  */
 const findAll = function ({dir, filter, needle}) {
-    const files = FILE_SYSTEM.readdirSync(dir)
+    const files = readdirSync(dir)
         .filter(isNotHidden)
         .filter(function (item) {
             const exclusions = filter.data;
             for (let i = 0; i < exclusions.length; i++) {
-                if (exclusions[i] === PATH.join(dir, item) || exclusions[i] === item) {
+                if (exclusions[i] === join(dir, item) || exclusions[i] === item) {
                     return false;
                 }
             }
@@ -55,8 +53,8 @@ const findAll = function ({dir, filter, needle}) {
 
     const directories = [];
     for (let i = 0; i < files.length; i++) {
-        const path = PATH.join(dir, files[i]);
-        if (FILE_SYSTEM.statSync(path).isDirectory()) {
+        const path = join(dir, files[i]);
+        if (statSync(path).isDirectory()) {
             const result = findAll({
                 dir: path,
                 filter: filter,
@@ -77,7 +75,7 @@ const findAll = function ({dir, filter, needle}) {
  * Returns a filtered array of paths to files within directory recursively
  */
 const folders = function ({dir, filter}) {
-    const files = FILE_SYSTEM.readdirSync(dir)
+    const files = readdirSync(dir)
         .filter(isNotHidden)
         .filter(function (item) {
 
@@ -86,14 +84,14 @@ const folders = function ({dir, filter}) {
             if (isExclude) {
                 const exclusions = filter.data;
                 for (let i = 0; i < exclusions.length; i++) {
-                    if (exclusions[i] === PATH.join(dir, item) || exclusions[i] === item) {
+                    if (exclusions[i] === join(dir, item) || exclusions[i] === item) {
                         return false;
                     }
                 }
             } else if (isInclude) {
                 const inclusions = filter.data;
                 for (let i = 0; i < inclusions.length; i++) {
-                    if (inclusions[i] === PATH.join(dir, item) || inclusions[i] === item) {
+                    if (inclusions[i] === join(dir, item) || inclusions[i] === item) {
                         return true;
                     }
                 }
@@ -104,8 +102,8 @@ const folders = function ({dir, filter}) {
 
     const directories = [];
     for (let i = 0; i < files.length; i++) {
-        const path = PATH.join(dir, files[i]);
-        if (FILE_SYSTEM.statSync(path).isDirectory()) {
+        const path = join(dir, files[i]);
+        if (statSync(path).isDirectory()) {
             const result = folders({
                 dir: path,
                 filter: filter
@@ -125,8 +123,8 @@ const folders = function ({dir, filter}) {
  * Returns an array of files in the passed directory
  */
 const files = function ({inside}) {
-    return FILE_SYSTEM.readdirSync(inside).filter(function (file) {
-        return FILE_SYSTEM.statSync(PATH.join(inside, file)).isFile();
+    return readdirSync(inside).filter(function (file) {
+        return statSync(join(inside, file)).isFile();
     }).filter(isNotHidden);
 };
 
@@ -134,13 +132,7 @@ const files = function ({inside}) {
  * Returns true if file exists
  */
 const exists = function ({file}) {
-    return FILE_SYSTEM.existsSync(file);
+    return existsSync(file);
 };
 
-exports.read = read;
-exports.write = write;
-exports.create = create;
-exports.findAll = findAll;
-exports.folders = folders;
-exports.files = files;
-exports.exists = exists;
+export { read, write, create, findAll, folders, files, exists }
