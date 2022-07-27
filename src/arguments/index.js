@@ -1,8 +1,6 @@
-'use strict';
-
-const FILE_HELPER = require('../file/index.js');
-const LOGGER = require('winston');
-const PATH = require('path');
+import { exists } from '../file/index.js'
+import logger from 'winston';
+import { join } from 'path';
 
 const getArguments = function ({config}) {
     let success = false;
@@ -14,19 +12,19 @@ const getArguments = function ({config}) {
         const isVersion = process.argv[5];
         const version = process.argv[6];
 
-        const templatePath = PATH.join(directory, template);
-        if (!FILE_HELPER.exists({file: directory})) {
-            LOGGER.log('error', 'Directory does not exist', {
+        const templatePath = join(directory, template);
+        if (!exists({file: directory})) {
+            logger.error('Directory does not exist', {
                 path: directory
             });
             process.exit(1);
-        } else if (!FILE_HELPER.exists({file: templatePath})) {
-            LOGGER.log('error', 'Template does not exist', {
+        } else if (!exists({file: templatePath})) {
+            logger.error('Template does not exist', {
                 path: templatePath
             });
             process.exit(1);
         } else if (!isValidPosition({position: isVersion})) {
-            LOGGER.log('error', 'Position is not valid', {
+            logger.error('Position is not valid', {
                 position: isVersion
             });
             process.exit(1);
@@ -48,4 +46,4 @@ const isValidPosition = function ({position}) {
     return position === 'none' || position === 'prefix' || position == 'suffix';
 };
 
-exports.getArguments = getArguments;
+export { getArguments };
